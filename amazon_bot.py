@@ -1,6 +1,8 @@
 import os
 import logging
 import requests
+import schedule
+import time
 from dotenv import load_dotenv
 
 # Carica le variabili da .env
@@ -35,25 +37,12 @@ def send_offer():
     r = requests.post(url, json=payload)
     print(r.json())
 
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    try:
-        logging.info("✅ Bot avviato - Invio offerta ora")
-        send_offer()
-    except Exception as e:
-        logging.error(f"Errore: {e}")
+def controlla_offerte():
+    print("Controllo offerte ora...")
+    send_offer()  
 
-'''
-    import os
+schedule.every(1).hour.do(controlla_offerte)
 
-    import telebot
-
-    # BOT_TOKEN = os.getenv('BOT_TOKEN')
-    bot = telebot.TeleBot("6239740315:AAFKiR4EzT6crDldBKcPftSczpxPeOMpBGA")
-
-    @bot.message_handler(commands=['start', 'hello'])
-    def send_welcome(message):
-        bot.reply_to(message, "Howdy, how are you doing?")
-
-    bot.infinity_polling()
-'''
+while True:
+    schedule.run_pending()
+    time.sleep(1)
