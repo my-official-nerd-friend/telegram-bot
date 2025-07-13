@@ -1,3 +1,9 @@
+# file
 *.env
 *.pyc
+
+# fixed files
 TODO.md
+
+# directory
+.vscode/
