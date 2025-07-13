@@ -1,1 +1,1 @@
-from .scheduler import Scheduler
+from common_utils.classes.scheduler import Scheduler
