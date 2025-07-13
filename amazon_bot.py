@@ -1,48 +1,34 @@
 import os
-import logging
-import requests
-import schedule
-import time
 from dotenv import load_dotenv
 
-# Carica le variabili da .env
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 TELEGRAM_CHANNEL = os.getenv("TELEGRAM_CHANNEL")
 
-def get_amazon_product():
-    return {
-        'title': 'Echo Dot (5ª generazione)',
-        'price': '29.99€',
-        'link': 'https://google.com',
-        'discount': '40%'
-    }
+import time
+import schedule
+from telegram.ext import Updater
+from common_utils import Scheduler
+
+# ---- Comando Telegram ----
+# def start(update, context):
+#     update.message.reply_text("Ciao! Sono attivo e ascolto i comandi.")
+
+def hello():
+    print("hello")
+
+# ---- Avvio del bot ----
+def main():
     
-def send_offer():
-    product = get_amazon_product()
-    message = (
-        f"🔥 *Offerta Amazon!*\n\n"
-        f"📦 *{product['title']}*\n"
-        f"💸 Prezzo: {product['price']} (-{product['discount']})\n"
-        f"🔗 [Acquista su Amazon]({product['link']})\n\n"
-        f"_Questo link è affiliato._"
-    )
+    scheduler = Scheduler()
+    scheduler.schedule_task_in_seconds(5, hello)
+    scheduler.start()
 
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    payload = {
-        "chat_id" : TELEGRAM_CHANNEL,
-        "text": message
-    }
-    r = requests.post(url, json=payload)
-    print(r.json())
+    # Avvio bot Telegram
+    updater = Updater(BOT_TOKEN, use_context=True)
+    updater.start_polling()
+    updater.idle()
 
-def controlla_offerte():
-    print("Controllo offerte ora...")
-    send_offer()  
-
-schedule.every(1).hour.do(controlla_offerte)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+if __name__ == '__main__':
+    main()
