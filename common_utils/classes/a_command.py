@@ -3,7 +3,7 @@
 # common attributes and functionalities
 from abc import ABC, abstractmethod
 
-class Command(ABC):
+class ACommand(ABC):
     def __init__(self, name: str, label: str):
         self.name = name
         self.label = label
