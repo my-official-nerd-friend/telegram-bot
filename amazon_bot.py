@@ -4,17 +4,12 @@ load_dotenv()
 from telegram.ext import Updater, CommandHandler
 from common_utils import Scheduler, BOT_TOKEN, COMMANDS
 
-def sample():
-    print("this is a sample message")
-
-# ---- Avvio del bot ----
 def main():
     
     scheduler = Scheduler()
     #scheduler.schedule_task_in_seconds(5, sample)
     scheduler.start()
 
-    # Avvio bot Telegram
     updater = Updater(BOT_TOKEN, use_context=True)
     updater.dispatcher.bot_data["COMMANDS"] = COMMANDS
     

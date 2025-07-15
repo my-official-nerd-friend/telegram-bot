@@ -5,7 +5,6 @@ from .command import Command
 class HelpCommand(Command):
     def __init__(self):
         super().__init__("help", "❓ Help")
-
     def run(self, update, context):
         commands = context.bot_data.get("COMMANDS", {})
         keyboard = [
