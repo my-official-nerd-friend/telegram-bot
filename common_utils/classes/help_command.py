@@ -1,5 +1,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
+from common_utils.constants import MAX_COMMANDS_PER_LINE
+
 from .a_command import ACommand
 
 class HelpCommand(ACommand):
@@ -11,7 +13,7 @@ class HelpCommand(ACommand):
         tmp = []
         keyboard = []
         for i, cmd in enumerate(commands.values()):
-            if i % 2 == 0 and i != 0:
+            if i % MAX_COMMANDS_PER_LINE == 0 and i != 0:
                 keyboard.append(tmp)
                 tmp = []
             else:

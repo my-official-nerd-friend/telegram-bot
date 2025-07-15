@@ -1,4 +1,5 @@
 from .classes import Scheduler
-from .constants import BOT_TOKEN, TELEGRAM_CHANNEL, COMMANDS
+from .constants import BOT_TOKEN, TELEGRAM_CHANNEL
+from .commands import COMMANDS
 
 __all__ = ["Scheduler", "BOT_TOKEN", "TELEGRAM_CHANNEL", "COMMANDS"]
