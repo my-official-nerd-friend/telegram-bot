@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from telegram.ext import Updater, CommandHandler
-from common_utils import Scheduler, BOT_TOKEN, COMMANDS
+from src import Scheduler, BOT_TOKEN, COMMANDS
 
 def main():
     

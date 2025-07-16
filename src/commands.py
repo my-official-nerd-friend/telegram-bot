@@ -1,4 +1,4 @@
-from common_utils.classes import HelpCommand, CreatePostManualCommand
+from src.classes import HelpCommand, CreatePostManualCommand
 
 COMMANDS = {
     cmd.name: cmd

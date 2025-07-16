@@ -1,8 +1,8 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from common_utils.constants import MAX_COMMANDS_PER_LINE
+from src.constants import MAX_COMMANDS_PER_LINE
 
-from .a_command import ACommand
+from .abstract.a_command import ACommand
 
 class HelpCommand(ACommand):
     def __init__(self):

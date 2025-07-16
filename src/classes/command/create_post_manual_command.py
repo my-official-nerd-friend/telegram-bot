@@ -1,5 +1,5 @@
 from telegram import ParseMode
-from .a_create_post_command import ACreatePostCommand
+from .abstract.a_create_post_command import ACreatePostCommand
 
 class CreatePostManualCommand(ACreatePostCommand):
     def __init__(self):
