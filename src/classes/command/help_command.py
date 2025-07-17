@@ -19,7 +19,9 @@ class HelpCommand(ACommand):
             else:
                 tmp.append(InlineKeyboardButton(cmd.label, callback_data=cmd.name)) 
         keyboard.append(tmp)
-        return update.message.reply_text(
-            "📋 Commands:",
+        
+        message = update.message or update.callback_query.message
+        return message.reply_text(
+            "📋 Comandi:",
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
