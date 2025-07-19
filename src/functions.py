@@ -1,5 +1,3 @@
-from telegram.ext import CallbackQueryHandler
-
 from src.commands import COMMANDS
 
 def handle_command_callback(update, context):

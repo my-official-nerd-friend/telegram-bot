@@ -5,8 +5,8 @@ from .a_command import ACommand
 from telegram import ParseMode
 
 class ACreatePostCommand(ACommand):
-    def create_post(update, channel_id, image_url, caption):
-        update.message.bot.send_photo(
+    def create_post(self,context, channel_id, image_url, caption):
+        context.bot.send_photo(
             chat_id=channel_id,
             photo=image_url,
             caption=caption,

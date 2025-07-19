@@ -1,6 +1,11 @@
 from telegram import ParseMode
 import urllib.request
+
+from src.constants import AMAZON_AFFILIATE_TAG, TELEGRAM_CHANNEL
 from .abstract.a_create_post_command import ACreatePostCommand
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
+import html
 
 class CreatePostManualCommand(ACreatePostCommand):
     def __init__(self):
@@ -18,14 +23,16 @@ class CreatePostManualCommand(ACreatePostCommand):
         if update.message:
             text = update.message.text.replace(f"/{self.name}", "")
             try:
+                if not text :
+                    return update.message.reply_text("Formato non valido. Assicurati di fornire i dati nel seguente formato *nome;prezzo;image_url* oppure anche solo un *link*", parse_mode=ParseMode.MARKDOWN)
                 if ";" in text:
                     args = [arg.strip() for arg in text.split(";")]
-                    if len(args) != 3:
+                    print(args)
+                    if len(args) != 4:
                         update.message.reply_text("Formato non valido. Assicurati di fornire i dati nel seguente formato *nome;prezzo;image_url*", parse_mode=ParseMode.MARKDOWN)
                         return 
-                    name, price, image_url = args
-                    print("3 input args: ", name, price, image_url)
-                if text:
+                    name, price, image_url, link = args
+                else:
                     link = text
                     parsed = self.__parse_link(link)
                     if not parsed:
@@ -34,31 +41,36 @@ class CreatePostManualCommand(ACreatePostCommand):
                     name = parsed["name"]
                     price = parsed["price"]
                     image_url = parsed["image_url"]
-                    print("3 link args: ", name, price, image_url)  
-                if not text :
-                    return update.message.reply_text("Formato non valido. Assicurati di fornire i dati nel seguente formato *nome;prezzo;image_url* oppure anche solo un *link*", parse_mode=ParseMode.MARKDOWN)
+                    
+                affiliateLink = self.__create_amazon_affiliate_url(link, AMAZON_AFFILIATE_TAG)
+                caption = f"🛍 <b>{html.escape(name)}</b>\n💸 Prezzo: <b>{html.escape(price)}</b>\n🔗 <a href=\"{affiliateLink}\">Link al prodotto</a>"
+                print(caption)
+                return self.create_post(context, TELEGRAM_CHANNEL, image_url, caption)
             except Exception as e:
                 update.message.reply_text(f"Errore: {str(e)}")    
         if not update.callback_query and not update.message:
             return update.message.reply_text("Errore Generico")
-        
-        return
-
-        # #     caption = f"🛍 <b>{name}</b>\n💸 Prezzo: <b>{price}</b>\n🔗 <a href='{link}'>Link al prodotto</a>"
-
-        # #     chiama la create_post che eredita dalla classe atratta di livello 2
                 
-    def __parse_link(self,link):
+    def __parse_link(self, link):
         req = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
-        data = urllib.request.urlopen(req).read() 
-        strLink = data.decode("utf8")
-        print(strLink)
-        ## name : prendere la stringa dentro l'elemento con id productTitle
-        ## prezzo : prendere la stringa dentro l'elemento con id corePriceDisplay_desktop_feature_div
-        ## image_url : prendere l'src dentro l'elemento con id imgTagWrapperId
-        return {
-            "name": "Sample",
-            "price": "2€",
-            "image_url": "abc"
-        }
+        data = urllib.request.urlopen(req).read()
+        html = data.decode("utf8")
         
+        soup = BeautifulSoup(html, 'html.parser')
+        name = soup.find("span", id="productTitle").getText(strip=True)
+        price = soup.find("span", class_="a-offscreen").getText(strip=True)
+        image_url = soup.find("img", id="landingImage")["src"]
+         
+        print(f"\n{name}\n{price}\n{image_url}")
+        return {
+            "name": name,
+            "price": price,
+            "image_url": image_url
+        }
+   
+    def __create_amazon_affiliate_url(self, link, my_tag):
+        parsed = urlparse(link)
+        qs = parse_qs(parsed.query)
+        qs['tag'] = my_tag
+        new_q = urlencode(qs, doseq=True)
+        return urlunparse(parsed._replace(query=new_q)).strip()    
