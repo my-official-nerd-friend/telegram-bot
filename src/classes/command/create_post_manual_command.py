@@ -4,7 +4,6 @@ import urllib.request
 from src.constants import AMAZON_AFFILIATE_TAG, TELEGRAM_CHANNEL
 from .abstract.a_create_post_command import ACreatePostCommand
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 import html
 
 class CreatePostManualCommand(ACreatePostCommand):
@@ -42,15 +41,14 @@ class CreatePostManualCommand(ACreatePostCommand):
                     price = parsed["price"]
                     image_url = parsed["image_url"]
                     
-                affiliateLink = self.__create_amazon_affiliate_url(link, AMAZON_AFFILIATE_TAG)
+                affiliateLink = self.get_amazon_affiliate_url(link, AMAZON_AFFILIATE_TAG)
                 caption = f"🛍 <b>{html.escape(name)}</b>\n💸 Prezzo: <b>{html.escape(price)}</b>\n🔗 <a href=\"{affiliateLink}\">Link al prodotto</a>"
                 print(caption)
                 return self.create_post(context, TELEGRAM_CHANNEL, image_url, caption)
             except Exception as e:
                 update.message.reply_text(f"Errore: {str(e)}")    
         if not update.callback_query and not update.message:
-            return update.message.reply_text("Errore Generico")
-                
+            return update.message.reply_text("Errore Generico")          
     def __parse_link(self, link):
         req = urllib.request.Request(link, headers={'User-Agent': 'Mozilla/5.0'})
         data = urllib.request.urlopen(req).read()
@@ -66,11 +64,4 @@ class CreatePostManualCommand(ACreatePostCommand):
             "name": name,
             "price": price,
             "image_url": image_url
-        }
-   
-    def __create_amazon_affiliate_url(self, link, my_tag):
-        parsed = urlparse(link)
-        qs = parse_qs(parsed.query)
-        qs['tag'] = my_tag
-        new_q = urlencode(qs, doseq=True)
-        return urlunparse(parsed._replace(query=new_q)).strip()    
+        }   

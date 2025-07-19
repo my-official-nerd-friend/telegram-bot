@@ -3,6 +3,7 @@
 # common attributes and functionalities
 from .a_command import ACommand
 from telegram import ParseMode
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 class ACreatePostCommand(ACommand):
     def create_post(self,context, channel_id, image_url, caption):
@@ -12,3 +13,10 @@ class ACreatePostCommand(ACommand):
             caption=caption,
             parse_mode=ParseMode.HTML
         )
+    def get_amazon_affiliate_url(self, link, my_tag):
+        parsed = urlparse(link)
+        qs = parse_qs(parsed.query)
+        qs['tag'] = my_tag
+        new_q = urlencode(qs, doseq=True)
+        return urlunparse(parsed._replace(query=new_q)).strip()     
+    
