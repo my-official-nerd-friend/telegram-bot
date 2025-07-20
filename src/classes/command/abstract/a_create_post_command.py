@@ -1,9 +1,10 @@
 # This is the abstract class that every create post command
 # has to extends in order to inherited the command's
 # common attributes and functionalities
-from .a_command import ACommand
+
 from telegram import ParseMode
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
+from src.classes.command.abstract.a_command import ACommand
 
 class ACreatePostCommand(ACommand):
     def create_post(self,context, channel_id, image_url, caption):

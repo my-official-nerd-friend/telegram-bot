@@ -1,10 +1,11 @@
 from telegram import ParseMode
 import urllib.request
-
-from src.constants import AMAZON_AFFILIATE_TAG, TELEGRAM_CHANNEL
-from .abstract.a_create_post_command import ACreatePostCommand
 from bs4 import BeautifulSoup
 import html
+# from src.constants import AMAZON_AFFILIATE_TAG, TELEGRAM_CHANNEL
+# from .abstract.a_create_post_command import ACreatePostCommand
+from src.constants import AMAZON_AFFILIATE_TAG, TELEGRAM_CHANNEL
+from src.classes.command.abstract.a_create_post_command import ACreatePostCommand
 
 class CreatePostManualCommand(ACreatePostCommand):
     def __init__(self):

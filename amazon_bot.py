@@ -2,7 +2,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
-from src import Scheduler, BOT_TOKEN, COMMANDS, handle_command_callback
+from src.classes.scheduler import Scheduler
+from src.constants import BOT_TOKEN
+from src.commands import COMMANDS
+from src.functions import handle_command_callback
 
 def main():
     
