@@ -3,4 +3,4 @@ import os
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 TELEGRAM_CHANNEL = os.getenv("TELEGRAM_CHANNEL")
 MAX_COMMANDS_PER_LINE = 2
-AMAZON_AFFILIATE_TAG = "myofficialnerdfriend-21"
+AMAZON_AFFILIATE_TAG = "myofficialnerdfriend-telegram-channel-21"
