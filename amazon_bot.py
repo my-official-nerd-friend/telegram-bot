@@ -5,7 +5,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 from src.classes.scheduler import Scheduler
 from src.constants import BOT_TOKEN
 from src.commands import COMMANDS
-from src.functions import handle_command_callback
+from src.functions.handle_command_callback import handle_command_callback
 
 def main():
     
