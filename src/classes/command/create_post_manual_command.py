@@ -13,7 +13,7 @@ class CreatePostManualCommand(ACreatePostCommand):
             update.callback_query.message.reply_text( 
                 "\nInserisci il comando in questo modo: \n"                                     
                 "<b><code>/create_post_manual</code></b>"
-                " <i>nome;prezzo;link_immagine</i> oppure inserisci soltanto <i>link</i> ",
+                " <i>nome;prezzo;link_immagine;link</i> oppure inserisci soltanto <i>link</i> ",
                 parse_mode=ParseMode.HTML
             )      
         # situazione 2 : inserisco il comando da input
@@ -49,6 +49,7 @@ class CreatePostManualCommand(ACreatePostCommand):
                 update.message.reply_text("✅ Post creato con successo!")
                 return
             except Exception as e:
-                update.message.reply_text(f"Errore: {str(e)}")    
+                print(f"Errore: {str(e)}")
+                update.message.reply_text("❌ Creazione del Post interrotta da un errore...")    
         if not update.callback_query and not update.message:
-            return update.message.reply_text("Errore Generico")           
+            return update.message.reply_text("❌ Impossibile creare il post!")           
