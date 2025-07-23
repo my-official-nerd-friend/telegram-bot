@@ -20,7 +20,7 @@ class CreatePostManualCommand(ACreatePostCommand):
         if update.message:
             text = update.message.text.replace(f"/{self.name}", "")
             try:
-                if not text :
+                if not text:
                     return update.message.reply_text("Formato non valido. Assicurati di fornire i dati nel seguente formato *nome;prezzo;image_url* oppure anche solo un *link*", parse_mode=ParseMode.MARKDOWN)
                 if ";" in text:
                     args = [arg.strip() for arg in text.split(";")]
@@ -40,8 +40,14 @@ class CreatePostManualCommand(ACreatePostCommand):
                     image_url = parsed["image_url"]
                     
                 affiliateLink = get_amazon_affiliate_url(link, AMAZON_AFFILIATE_TAG)
-                caption = f"🛍 <b>{html.escape(name)}</b>\n💸 Prezzo: <b>{html.escape(price)}</b>\n🔗 <a href=\"{affiliateLink}\">Link al prodotto</a>"
-                return self.create_post(context, TELEGRAM_CHANNEL, image_url, caption)
+                caption = (
+                    f"🛍 <b>{html.escape(name)}</b>"
+                    f"\n💸 Prezzo: <b>{html.escape(price)}</b>"
+                    f"\n🔗 <a href=\"{affiliateLink}\">Link affiliato</a>"
+                )
+                self.create_post(context, TELEGRAM_CHANNEL, image_url, caption)
+                update.message.reply_text("✅ Post creato con successo!")
+                return
             except Exception as e:
                 update.message.reply_text(f"Errore: {str(e)}")    
         if not update.callback_query and not update.message:
